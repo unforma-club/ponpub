@@ -1,0 +1,12 @@
+.etc
+.next
+build
+dist
+node_modules
+tmp
+
+.DS_Store
+.env*
+!.env.example
+
+*log
