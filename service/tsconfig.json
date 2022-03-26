@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "module": "CommonJS",
+        "lib": ["ES5", "ES2017", "ESNext.AsyncIterable"],
+        "sourceMap": false,
+        "outDir": "./build",
+        "moduleResolution": "node",
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "typeRoots": ["./src/types", "./node_modules/@types"],
+        "baseUrl": "./src",
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true
+    },
+    "include": ["src", ".env"],
+    "exclude": ["build", ".etc", "node_modules"]
+}
