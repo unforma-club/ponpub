@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: "ponpub-service-prod",
-            cwd: "./ponpub-demo/service",
+            cwd: "./service",
             script: "yarn start",
             watch: "build",
             env: {
