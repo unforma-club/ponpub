@@ -1,2 +1,1 @@
-# ponpub
-Font publishing tool
+# Ponpub | Font Publishing Tools
