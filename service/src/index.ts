@@ -7,6 +7,7 @@ import app from "app";
 const PORT = process.env.PORT;
 const DB_URI = process.env.MONGO_URI;
 const JWT_KEY = process.env.JWT_KEY;
+const PONPUB_CONSOLE_URL = process.env.PONPUB_CONSOLE_URL;
 
 async function connection(uri: string) {
     try {
@@ -20,6 +21,8 @@ async function connection(uri: string) {
 (async () => {
     if (!DB_URI) throw new Error("DB Url must be define");
     if (!JWT_KEY) throw new Error("JWT Key must be define");
+    if (!PONPUB_CONSOLE_URL) throw new Error("Console Key must be define");
+
     await connection(DB_URI);
     app.listen(PORT, () => console.log(`Running on http://localhost:${PORT}`));
 })();
