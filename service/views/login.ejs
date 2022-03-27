@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <meta charset="utf-8" />
+        <meta name="robots" content="nofollow" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>Login Form</title>
+        <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/font/BDO-Grotesk/BDOGrotesk-VF.woff2"
+            crossOrigin=""
+        />
+        <link rel="stylesheet" type="text/css" href="/style/global.css" />
+    </head>
+    <body>
+        <main id="__login">
+            <form action="/auth?callback_url=<%= callback_url %>" method="post">
+                <h1><%= message %></h1>
+                <label>
+                    <input name="email" type="email" placeholder="Email" required />
+                </label>
+                <label>
+                    <input name="password" type="password" placeholder="••••••" required />
+                </label>
+                <div>
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </main>
+    </body>
+</html>

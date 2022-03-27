@@ -1,0 +1,76 @@
+@font-face {
+    font-family: "BDO Grotesk";
+    src: url("/font/BDO-Grotesk/BDOGrotesk-VF.woff2") format("woff2-variations");
+    font-style: normal;
+    font-weight: 300 900;
+    font-display: swap;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+
+    background-color: #fff;
+    color: #000;
+
+    font-size: 16px;
+    font-family: "BDO Grotesk";
+}
+
+#__login {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    margin: 0;
+    margin-bottom: 1em;
+}
+
+form {
+    width: 320px;
+    aspect-ratio: 4/5;
+
+    border: 1px solid;
+    border-radius: 0.5em;
+
+    padding: 1em;
+    box-shadow: 0 0 0.5em 0 rgb(0, 0, 0, 0.5);
+}
+
+label {
+    display: block;
+}
+
+input {
+    apperance: none;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid;
+    width: 100%;
+    font: inherit;
+    color: currentColor;
+
+    height: 2em;
+    margin-bottom: 0.5em;
+}
+
+button {
+    background: none;
+    border: none;
+    border-radius: 0.25em;
+    font: inherit;
+    height: 2em;
+    cursor: pointer;
+
+    background-color: #000;
+    color: #fff;
+}
