@@ -13,6 +13,7 @@ declare global {
             PORT: string;
             MONGO_URI: string;
             JWT_KEY: string;
+            PONPUB_CONSOLE_URL: string;
         }
     }
 }

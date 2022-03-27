@@ -3,5 +3,5 @@ export type BaseUser = {
     email: string;
     userName: string;
     role: number;
-    status: string;
+    status?: string;
 };
