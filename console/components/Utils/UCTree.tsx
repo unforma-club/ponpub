@@ -74,4 +74,6 @@ const UCTree = memo<UCTreeProps>((props) => {
     );
 });
 
+UCTree.displayName = "UC-Tree";
+
 export default UCTree;
