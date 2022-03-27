@@ -7,18 +7,18 @@ module.exports = {
             watch: "build",
             env: {
                 PORT: 5000,
-                NODE_ENV: "production",
-            },
+                NODE_ENV: "production"
+            }
         },
-        // {
-        //     name: "ponpub-console-prod",
-        //     cwd: "./ponpub-demo/console",
-        //     script: "yarn start",
-        //     watch: ".next",
-        //     env: {
-        //         PORT: 5002,
-        //         NODE_ENV: "production",
-        //     },
-        // },
-    ],
+        {
+            name: "ponpub-console-prod",
+            cwd: "./console",
+            script: "yarn start",
+            watch: ".next",
+            env: {
+                PORT: 5002,
+                NODE_ENV: "production"
+            }
+        }
+    ]
 };
