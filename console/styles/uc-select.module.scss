@@ -1,0 +1,50 @@
+.container {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+    overflow: hidden;
+
+    color: inherit;
+    background-color: inherit;
+
+    border-radius: 2em;
+}
+
+.select {
+    appearance: none;
+    cursor: pointer;
+
+    font: inherit;
+    text-transform: capitalize;
+    line-height: 1.5;
+    text-rendering: auto;
+
+    border: none;
+    border-radius: inherit;
+    padding: 0 1.5em 0 0.75em;
+
+    color: inherit;
+    background-color: inherit;
+}
+
+.suffix {
+    // display: inline-flex;
+    // align-items: center;
+    // justify-content: center;
+
+    position: absolute;
+    pointer-events: none;
+    // top: 0;
+    right: 0;
+    // bottom: 0;
+    // height: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+    color: inherit;
+    padding-right: 0.1em;
+
+    > svg {
+        fill: currentColor;
+    }
+}
