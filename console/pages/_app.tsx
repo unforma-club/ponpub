@@ -1,4 +1,3 @@
-import "styles/global.scss";
 import { AppProps } from "next/app";
 import { SWRConfig } from "swr";
 import { ThemeProvider as ProviderTheme } from "next-themes";
