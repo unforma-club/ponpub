@@ -18,17 +18,15 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: 22
           script: |
+            cd ~/ponpub-demo
             pm2 stop pm2-eco.config.js
-            cd ~/ponpub-demo/service
             git pull
-            git status
-            rm -rf build
+            cd ~/ponpub-demo/service
             yarn install
             yarn build
             cd ~/ponpub-demo/console
-            git pull
-            git status
             rm -rf .next
             yarn install
             yarn build
+            cd ~/ponpub-demo
             pm2 restart pm2-eco.config.js
