@@ -3,6 +3,9 @@
     const storedTheme = localStorage.getItem("theme");
     const attr = "data-theme";
 
+    const MEDIA = "(prefers-color-scheme: dark)";
+    const matchesDark = window.matchMedia(MEDIA).matches;
+
     switch (storedTheme) {
         case "dark":
             el.setAttribute(attr, "dark");
@@ -11,7 +14,7 @@
             el.setAttribute(attr, "light");
             break;
         default:
-            el.setAttribute(attr, "light");
+            el.setAttribute(attr, matchesDark ? "dark" : "light");
             break;
     }
 })();
