@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useRouter } from "next/router";
 import useSWR, { KeyedMutator } from "swr";
 import fetchJson from "libs/fetchJson";
@@ -31,12 +31,12 @@ export const ConsumerSession = ContextSession.Consumer;
 
 export default function ProviderSession(props: PropsWithChildren<{}>) {
     const { children } = props;
-    const { data, mutate } = useSWR<PayloadSession>("/api/v1/session/ping");
+    const { data, mutate } = useSWR<PayloadSession>("/ponpub/api/v1/session/ping");
     const [session, setSession] = useState<any>(null);
     const [initializing, setInitializing] = useState(true);
 
     function handleLogout() {
-        fetchJson("/api/v1/user/logout", { method: "POST" }).then(() => mutate());
+        fetchJson("/ponpub/api/v1/user/logout", { method: "POST" }).then(() => mutate());
     }
 
     const { asPath, isReady, replace } = useRouter();
@@ -51,7 +51,7 @@ export default function ProviderSession(props: PropsWithChildren<{}>) {
                     if (!isAuthPath && isReady) {
                         const newUrl = asPath;
                         replace(
-                            `${NEXT_PUBLIC_API_URL}/auth?callback_url=${NEXT_PUBLIC_SITE_URL}${newUrl}`
+                            `${NEXT_PUBLIC_API_URL}/auth?callback_url=${NEXT_PUBLIC_SITE_URL}/ponpub${newUrl}`
                         );
                     }
                 }
