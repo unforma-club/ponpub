@@ -33,8 +33,8 @@ app.use(
         name: "ponpub_session",
         signed: false,
         secure: false,
-        domain: isProduction ? "ponpub-test.unforma.club" : "",
-        sameSite: isProduction ? "strict" : "none"
+        domain: isProduction ? "ponpub-test.unforma.club" : undefined,
+        sameSite: isProduction ? "strict" : "lax"
     })
 );
 
