@@ -1,4 +1,5 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const isProduction = process.env.NODE_ENV === "production";
 
 module.exports = {
     reactStrictMode: true,
@@ -10,17 +11,19 @@ module.exports = {
     },
     basePath: "/ponpub",
     async rewrites() {
-        return [
-            {
-                source: "/api/:path*",
-                destination: `${API_URL}/api/:path*`,
-                basePath: false
-            },
-            {
-                source: "/static/:path*",
-                destination: `${API_URL}/static/:path*`,
-                basePath: false
-            }
-        ];
+        return isProduction
+            ? []
+            : [
+                  {
+                      source: "/api/:path*",
+                      destination: `${API_URL}/api/:path*`,
+                      basePath: false
+                  },
+                  {
+                      source: "/static/:path*",
+                      destination: `${API_URL}/static/:path*`,
+                      basePath: false
+                  }
+              ];
     }
 };
