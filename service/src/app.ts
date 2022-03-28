@@ -41,38 +41,40 @@ app.use(morgan(isProduction ? "common" : "dev"));
 app.use("/v1", RouterV1);
 
 const csp = `default-src 'self'; script-src 'self'; form-action 'self' ${process.env.PONPUB_CONSOLE_URL};`;
-app.get("/auth", (req, res) => {
-    const cbUrl = req.query.callback_url;
-    res.setHeader("Content-Security-Policy", csp);
-    return res.render("login", { message: "Login", callback_url: cbUrl as string });
-});
-app.post("/auth", async (req: Request, res: Response) => {
-    const cbUrl = req.query.callback_url;
-    const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
+app.route("/auth")
+    .get((req, res) => {
+        const cbUrl = req.query.callback_url;
+        res.setHeader("Content-Security-Policy", csp);
 
-    res.setHeader("Content-Security-Policy", csp);
+        return res.render("login", { message: "Login", callback_url: cbUrl as string });
+    })
+    .post(async (req: Request, res: Response) => {
+        const cbUrl = req.query.callback_url;
+        const { email, password } = req.body;
+        const user = await UserModel.findOne({ email });
 
-    if (!user)
-        return res
-            .status(404)
-            .render("login", { message: "User Not Found", callback_url: cbUrl as string });
+        res.setHeader("Content-Security-Policy", csp);
 
-    const passwordMatch = await ServicePassword.comparePassword(user.password, password);
-    if (!passwordMatch)
-        return res
-            .status(400)
-            .render("login", { message: "Wrong Password", callback_url: cbUrl as string });
+        if (!user)
+            return res
+                .status(404)
+                .render("login", { message: "User Not Found", callback_url: cbUrl as string });
 
-    ServiceSession.issueSession(req, {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        userName: user.userName
+        const passwordMatch = await ServicePassword.comparePassword(user.password, password);
+        if (!passwordMatch)
+            return res
+                .status(400)
+                .render("login", { message: "Wrong Password", callback_url: cbUrl as string });
+
+        ServiceSession.issueSession(req, {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            userName: user.userName
+        });
+
+        return res.redirect(307, cbUrl as string);
     });
-
-    return res.redirect(cbUrl as string, 307);
-});
 
 app.all("*", (_, res) => res.status(404).render("404"));
 app.use(errorHandler);
