@@ -1,20 +1,22 @@
-(function () {
-    const el = document.documentElement;
-    const storedTheme = localStorage.getItem("theme");
-    const attr = "data-theme";
-
-    const MEDIA = "(prefers-color-scheme: dark)";
-    const matchesDark = window.matchMedia(MEDIA).matches;
-
-    switch (storedTheme) {
-        case "dark":
-            el.setAttribute(attr, "dark");
-            break;
-        case "light":
-            el.setAttribute(attr, "light");
-            break;
-        default:
-            el.setAttribute(attr, matchesDark ? "dark" : "light");
-            break;
-    }
+!(function () {
+    try {
+        var d = document.documentElement;
+        var n = "data-theme";
+        var s = "setAttribute";
+        var e = localStorage.getItem("theme");
+        if ("system" === e || (!e && true)) {
+            var t = "(prefers-color-scheme: dark)",
+                m = window.matchMedia(t);
+            if (m.media !== t || m.matches) {
+                d.style.colorScheme = "dark";
+                d[s](n, "dark");
+            } else {
+                d.style.colorScheme = "light";
+                d[s](n, "light");
+            }
+        } else if (e) {
+            d[s](n, e || "");
+        }
+        if (e === "light" || e === "dark") d.style.colorScheme = e;
+    } catch (e) {}
 })();
