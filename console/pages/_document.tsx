@@ -14,9 +14,10 @@ export default class MyDocument extends Document {
                         rel="preload"
                         as="font"
                         type="font/woff2"
-                        href="/ponpub/fonts/BDO-Grotesk/BDOGrotesk-VF.woff2"
+                        href="/static/font/BDO-Grotesk/BDOGrotesk-VF.woff2"
                         crossOrigin=""
                     />
+                    <link rel="stylesheet" type="text/css" href="/static/style/global.css" />
                 </Head>
                 <body>
                     <Main />
