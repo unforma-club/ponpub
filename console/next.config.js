@@ -13,11 +13,13 @@ module.exports = {
         return [
             {
                 source: "/api/:path*",
-                destination: `${API_URL}/:path*`
+                destination: `${API_URL}/api/:path*`,
+                basePath: false
             },
             {
                 source: "/static/:path*",
-                destination: `${API_URL}/static/:path*`
+                destination: `${API_URL}/static/:path*`,
+                basePath: false
             }
         ];
     }
