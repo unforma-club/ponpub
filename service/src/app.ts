@@ -28,7 +28,15 @@ app.set("views", process.cwd() + "/views");
 app.use("/static", express.static("public"));
 app.use(json({ limit: "100mb" }));
 app.use(urlencoded({ extended: false }));
-app.use(cookieSession({ name: "ponpub_session", signed: false, secure: false }));
+app.use(
+    cookieSession({
+        name: "ponpub_session",
+        signed: false,
+        secure: false,
+        domain: isProduction ? "ponpub-test.unforma.club" : "",
+        sameSite: isProduction ? "strict" : "none"
+    })
+);
 
 app.use(xssClean());
 app.use(mongoSanitize());
