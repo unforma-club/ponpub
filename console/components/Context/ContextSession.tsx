@@ -31,12 +31,12 @@ export const ConsumerSession = ContextSession.Consumer;
 
 export default function ProviderSession(props: PropsWithChildren<{}>) {
     const { children } = props;
-    const { data, mutate } = useSWR<PayloadSession>("/ponpub/api/v1/session/ping");
+    const { data, mutate } = useSWR<PayloadSession>("/api/v1/session/ping");
     const [session, setSession] = useState<any>(null);
     const [initializing, setInitializing] = useState(true);
 
     function handleLogout() {
-        fetchJson("/ponpub/api/v1/user/logout", { method: "POST" }).then(() => mutate());
+        fetchJson("https://ponpub-test.unforma.club/api/v1/user/logout", { method: "POST" }).then(() => mutate());
     }
 
     const { asPath, isReady, replace } = useRouter();
@@ -50,9 +50,10 @@ export default function ProviderSession(props: PropsWithChildren<{}>) {
                     const isAuthPath = !!asPath.includes("/auth");
                     if (!isAuthPath && isReady) {
                         const newUrl = asPath;
-                        replace(
-                            `${NEXT_PUBLIC_API_URL}/auth?callback_url=${NEXT_PUBLIC_SITE_URL}/ponpub${newUrl}`
-                        );
+			window.location.replace(`https://ponpub-test.unforma.club/api/auth?callback_url=${NEXT_PUBLIC_SITE_URL}/ponpub${newUrl}`);
+//                        replace(
+//                            `https://ponpub-test.unforma.club/api/auth?callback_url=${NEXT_PUBLIC_SITE_URL}/ponpub${newUrl}`
+//                        );
                     }
                 }
             })

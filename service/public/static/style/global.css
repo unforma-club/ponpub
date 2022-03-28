@@ -1,6 +1,6 @@
 @font-face {
     font-family: "BDO Grotesk";
-    src: url("/font/BDO-Grotesk/BDOGrotesk-VF.woff2") format("woff2-variations");
+    src: url("/api/font/BDO-Grotesk/BDOGrotesk-VF.woff2") format("woff2-variations");
     font-style: normal;
     font-weight: 300 900;
     font-display: swap;
