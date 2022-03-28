@@ -1,0 +1,54 @@
+#__login {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#__login h1 {
+    margin: 0;
+    margin-bottom: 1em;
+}
+
+#__login form {
+    width: 320px;
+    aspect-ratio: 4/5;
+
+    border: 1px solid var(--accents-3);
+    border-radius: 1em;
+
+    padding: 1em;
+    box-shadow: 0 0 1em -0.5em var(--accents-6);
+}
+
+#__login label {
+    display: block;
+}
+
+#__login input {
+    apperance: none;
+    background: none;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid var(--accents-3);
+    width: 100%;
+    font: inherit;
+    color: currentColor;
+
+    height: 2em;
+    margin-bottom: 0.5em;
+}
+
+#__login button {
+    background: none;
+    border: none;
+    border-radius: 0.25em;
+    font: inherit;
+    height: 2em;
+    cursor: pointer;
+
+    background-color: var(--accents-12);
+    color: var(--accents-1);
+}
