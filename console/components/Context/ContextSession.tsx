@@ -18,7 +18,6 @@ type ContextSessionAttr = {
     handleLogout(): void;
 };
 
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 const NEXT_PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 
 const ContextSession = createContext<ContextSessionAttr>(undefined!);
@@ -36,12 +35,10 @@ export default function ProviderSession(props: PropsWithChildren<{}>) {
     const [initializing, setInitializing] = useState(true);
 
     function handleLogout() {
-        fetchJson("https://ponpub-test.unforma.club/api/v1/user/logout", { method: "POST" }).then(
-            () => mutate()
-        );
+        fetchJson(`/api/v1/user/logout`, { method: "POST" }).then(() => window.location.reload());
     }
 
-    const { asPath, isReady, replace } = useRouter();
+    const { asPath, isReady } = useRouter();
 
     useIsomorphicLayout(() => {
         mutate()
@@ -49,17 +46,19 @@ export default function ProviderSession(props: PropsWithChildren<{}>) {
                 if (res && res.success) {
                     setSession(res.data);
                 } else {
-                    const isAuthPath = !!asPath.includes("/auth");
-                    if (!isAuthPath && isReady) {
-                        const newUrl = asPath;
-                        window.location.replace(
-                            `https://ponpub-test.unforma.club/api/auth?callback_url=${NEXT_PUBLIC_SITE_URL}/ponpub${newUrl}`
-                        );
-                    }
+                    const newUrl = asPath;
+
+                    // Remember that we're set `basePath` as `/ponpub`
+                    // It's important to use `window` object instead of `useRouter()`
+                    // Forcing url to be `https://domain.com/api/*`
+                    // If we use `useRouter()` the url will be `https://domain.com/ponpub/api/*`
+                    window.location.replace(
+                        `/api/auth?callback_url=${NEXT_PUBLIC_SITE_URL}/ponpub${newUrl}`
+                    );
                 }
             })
             .then(() => setInitializing(false));
-    }, [data, asPath, isReady, mutate, replace]);
+    }, [data, asPath, isReady, mutate]);
 
     return (
         <ContextSession.Provider
