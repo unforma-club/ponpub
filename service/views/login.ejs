@@ -19,18 +19,25 @@
     </head>
     <body>
         <main id="__login">
-            <form action="/api/login?callback_url=<%= callback_url %>" method="get">
-                <h1><%= message %></h1>
+            <form id="__login_form">
+                <div class="form-header">
+                    <h1>Login</h1>
+                    <div id="__login_error" style="font-size: 10px"></div>
+                </div>
+
                 <label>
                     <input name="email" type="email" placeholder="Email" required />
                 </label>
                 <label>
                     <input name="password" type="password" placeholder="••••••" required />
                 </label>
+
                 <div>
                     <button type="submit">Login</button>
                 </div>
             </form>
         </main>
+
+        <script type="text/javascript" src="/static/script/form_action.js"></script>
     </body>
 </html>
