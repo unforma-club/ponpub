@@ -11,9 +11,6 @@ import helmet from "helmet";
 import errorHandler from "middlewares/mid.error";
 import MidSession from "middlewares/mid.session";
 import RouterV1 from "routes/route.v1";
-import UserModel from "models/model.user";
-import ServicePassword from "services/service.password";
-import ServiceSession from "services/service.session";
 
 const isProduction = process.env.NODE_ENV === "production";
 const app = express();
@@ -31,10 +28,9 @@ app.use(urlencoded({ extended: false }));
 app.use(
     cookieSession({
         name: "ponpub_session",
-        signed: false,
-        secure: false,
-        domain: isProduction ? "ponpub-test.unforma.club" : undefined,
-        sameSite: isProduction ? "strict" : "lax"
+        secret: process.env.JWT_KEY,
+        domain: isProduction ? "ponpub-test.unforma.club" : "localhost",
+        sameSite: "strict"
     })
 );
 
@@ -44,54 +40,29 @@ app.use(compression());
 
 app.use(cors());
 app.use(helmet({ referrerPolicy: { policy: ["origin"] } }));
-app.use(morgan(isProduction ? "common" : "dev"));
+app.use(
+    morgan(
+        isProduction
+            ? `:req[x-forwarded-for] - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"`
+            : ":req[x-forwarded-for] - :method :url :status :response-time ms - :res[content-length]"
+    )
+);
 
 app.use(MidSession.currentUser);
 app.use("/api/v1", RouterV1);
 
-// const csp = `default-src 'self'; script-src 'self' ${process.env.PONPUB_CONSOLE_URL}; form-action 'self' ${process.env.PONPUB_CONSOLE_URL};`;
-
-app.route("/api/auth").get((req, res) => {
+app.route("/api/auth").get(async (req, res) => {
     const currentUser = req.currentUser;
-    if (currentUser) {
-        return res.redirect(307, `${process.env.PONPUB_CONSOLE_URL}/ponpub`);
-    }
+    if (currentUser) return res.redirect(307, `${req.query.callback_url}`);
 
-    const cbUrl = req.query.callback_url ?? `${process.env.PONPUB_CONSOLE_URL}/ponpub`;
     const authMessage = (req.query.message as string) ?? "Login";
-
     const newMessage = authMessage
         .trim()
         .toLowerCase()
         .replace(/-/g, " ")
         .replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
 
-    return res.render("login", { message: newMessage, callback_url: cbUrl as string });
-});
-
-app.get("/api/login", async (req, res) => {
-    const cbUrl = req.query.callback_url ?? `${process.env.PONPUB_CONSOLE_URL}/ponpub`;
-    const { email, password } = req.query;
-    const user = await UserModel.findOne({ email });
-    // res.setHeader("Content-Security-Policy", csp);
-
-    if (!user) {
-        return res.redirect(307, `/api/auth?callback_url=${cbUrl}&message=user-not-found`);
-    }
-
-    const passwordMatch = await ServicePassword.comparePassword(user.password, password as string);
-    if (!passwordMatch) {
-        return res.redirect(307, `/api/auth?callback_url=${cbUrl}&message=wrong-password`);
-    }
-
-    ServiceSession.issueSession(req, {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        userName: user.userName
-    });
-
-    return res.redirect(307, cbUrl as string);
+    return res.render("login", { message: newMessage });
 });
 
 app.all("*", (_, res) => res.status(404).render("404"));
