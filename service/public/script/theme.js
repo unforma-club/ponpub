@@ -3,7 +3,7 @@
         var d = document.documentElement;
         var n = "data-theme";
         var s = "setAttribute";
-        var e = localStorage.getItem("theme");
+        var e = localStorage.getItem("ponpub-theme");
         if ("system" === e || (!e && true)) {
             var t = "(prefers-color-scheme: dark)",
                 m = window.matchMedia(t);
