@@ -9,7 +9,6 @@
 
 #__login h1 {
     margin: 0;
-    margin-bottom: 1em;
 }
 
 #__login form {
@@ -51,4 +50,14 @@
 
     background-color: var(--accents-12);
     color: var(--accents-1);
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1em;
+
+    margin-bottom: 1em;
 }
