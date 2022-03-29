@@ -1,6 +1,3 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
-const isProduction = process.env.NODE_ENV === "production";
-
 module.exports = {
     reactStrictMode: true,
     poweredByHeader: false,
@@ -9,21 +6,5 @@ module.exports = {
             16, 32, 48, 64, 128, 256, 384, 512, 720, 960, 1280, 1366, 1536, 1920, 2200, 2560
         ]
     },
-    basePath: "/ponpub",
-    async rewrites() {
-        return isProduction
-            ? []
-            : [
-                  {
-                      source: "/api/:path*",
-                      destination: `${API_URL}/api/:path*`,
-                      basePath: false
-                  },
-                  {
-                      source: "/static/:path*",
-                      destination: `${API_URL}/static/:path*`,
-                      basePath: false
-                  }
-              ];
-    }
+    basePath: "/ponpub"
 };
