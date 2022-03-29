@@ -11,6 +11,7 @@ export default function CustomApp(props: AppProps) {
     return (
         <SWRConfig value={{ fetcher: fetchJson, loadingTimeout: 10000 }}>
             <ProviderTheme
+                storageKey="ponpub-theme"
                 defaultTheme="system"
                 themes={["dark", "light"]}
                 disableTransitionOnChange
