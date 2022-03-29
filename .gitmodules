@@ -1,0 +1,3 @@
+[submodule "degarism"]
+	path = degarism
+	url = https://github.com/unforma-club/degarism-v4.git
