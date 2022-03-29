@@ -2,11 +2,12 @@ import { useRouter } from "next/router";
 import NextLink from "next/link";
 import UCTree from "./Utils/UCTree";
 import MenuFont from "./Menu/MenuFont";
+import MenuBlog from "./Menu/MenuBlog";
 import MenuAccount from "./Menu/MenuAccount";
 import MenuTheme from "./Menu/MenuTheme";
 
 export default function AppAside() {
-    const { pathname, basePath, asPath } = useRouter();
+    const { pathname } = useRouter();
     return (
         <aside
             style={{
@@ -25,16 +26,9 @@ export default function AppAside() {
                 }
             />
             <MenuFont />
+            <MenuBlog />
             <MenuAccount />
             <MenuTheme />
-            <div>
-                <a href="http://localhost:9090">You App Bro</a>
-            </div>
-            <div>
-                <a href={`http://localhost:9090/api/auth?callback_url=${basePath}${asPath}`}>
-                    To Auth
-                </a>
-            </div>
         </aside>
     );
 }
