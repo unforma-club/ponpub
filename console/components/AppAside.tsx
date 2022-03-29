@@ -1,20 +1,19 @@
 import { useRouter } from "next/router";
 import NextLink from "next/link";
 import UCTree from "./Utils/UCTree";
-import MenuTheme from "./Menu/MenuTheme";
 import MenuFont from "./Menu/MenuFont";
 import MenuAccount from "./Menu/MenuAccount";
+import MenuTheme from "./Menu/MenuTheme";
 
 export default function AppAside() {
-    const { pathname } = useRouter();
+    const { pathname, basePath, asPath } = useRouter();
     return (
         <aside
             style={{
                 width: "13em",
                 padding: "1em",
                 transform: "scale(var(--tree-scale))",
-                transformOrigin: "top left",
-                transition: "transform 300ms cubic-bezier(0.5, 0, 0.3, 1)"
+                transformOrigin: "top left"
             }}
         >
             <UCTree
@@ -26,8 +25,16 @@ export default function AppAside() {
                 }
             />
             <MenuFont />
-            <MenuTheme />
             <MenuAccount />
+            <MenuTheme />
+            <div>
+                <a href="http://localhost:9090">You App Bro</a>
+            </div>
+            <div>
+                <a href={`http://localhost:9090/api/auth?callback_url=${basePath}${asPath}`}>
+                    To Auth
+                </a>
+            </div>
         </aside>
     );
 }
