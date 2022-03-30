@@ -17,7 +17,7 @@ const UCTree = memo<UCTreeProps>((props) => {
     const [mounted, setMounted] = useState(false);
     const [expand, setExpand] = useState(false);
     const maxChild = 10;
-    const heightIfMoreThanMaxChild = `calc(2em * ${maxChild} + 2.75em)`;
+    const heightIfMoreThanMaxChild = `calc(2em * ${maxChild} + 4.5em)`;
 
     const cbAnimation = useCallback(() => {
         if (defaultOpen) {
@@ -27,7 +27,9 @@ const UCTree = memo<UCTreeProps>((props) => {
         }
     }, [defaultOpen]);
 
-    useEffect(() => void setMounted(() => (defaultOpen ? true : false)), []);
+    useEffect(() => {
+        setMounted(() => (defaultOpen ? true : false));
+    }, []);
 
     useIsomorphicLayout(() => {
         if (!refUl.current) return;
@@ -54,10 +56,13 @@ const UCTree = memo<UCTreeProps>((props) => {
 
     return (
         <motion.ul
+            ref={refUl}
             initial={defaultOpen}
             animate={defaultOpen ? "show" : "hide"}
             className={styles.container}
-            style={{ marginBlock: "0.3em" }}
+            style={{
+                height: mounted && childLength > maxChild && heightIfMoreThanMaxChild
+            }}
             variants={{
                 show: {
                     transition: {
@@ -75,57 +80,40 @@ const UCTree = memo<UCTreeProps>((props) => {
                 }
             }}
         >
-            <motion.li className={styles.list}>{parent}</motion.li>
-
-            <li
+            <motion.li
+                className={styles.list}
                 style={{
-                    width: "100%",
-                    position: "relative",
-                    paddingTop: "0.3em"
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 10
                 }}
             >
-                <ul
-                    ref={refUl}
+                {parent}
+            </motion.li>
+
+            {Children.map(children, (child, i) => (
+                <motion.li
+                    key={i}
+                    className={styles.list}
+                    variants={{
+                        hide: { display: "none" },
+                        show: { display: "block" }
+                    }}
                     style={{
-                        listStyle: "none",
-                        padding: 0,
-                        margin: 0,
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        flexWrap: "nowrap",
-                        gap: "0.3em",
-                        // marginBlock: defaultOpen && childLength > 1 ? "0.3em" : "0.15em",
-                        // marginBlock: "0.3em",
-                        height: mounted && childLength > maxChild && heightIfMoreThanMaxChild,
-                        transition: "all 500ms cubic-bezier(1, 0, 0, 1)"
+                        padding: `0 0 0 calc(var(--grid-gap) * 2)`,
+                        flexShrink: 0
+                    }}
+                    onAnimationComplete={(e) => {
+                        if (e === "show") {
+                            if (i === maxChild) cbAnimation();
+                        } else {
+                            if (i === childLength - maxChild) cbAnimation();
+                        }
                     }}
                 >
-                    {Children.map(children, (child, i) => (
-                        <motion.li
-                            key={i}
-                            className={styles.list}
-                            variants={{
-                                hide: { display: "none" },
-                                show: { display: "block" }
-                            }}
-                            style={{
-                                padding: `0 0 0 calc(var(--grid-gap) * 2)`,
-                                flexShrink: 0
-                            }}
-                            onAnimationComplete={(e) => {
-                                if (e === "show") {
-                                    if (i === maxChild) cbAnimation();
-                                } else {
-                                    if (i === childLength - maxChild) cbAnimation();
-                                }
-                            }}
-                        >
-                            {child}
-                        </motion.li>
-                    ))}
-                </ul>
-            </li>
+                    {child}
+                </motion.li>
+            ))}
         </motion.ul>
     );
 });
