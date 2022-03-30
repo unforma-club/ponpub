@@ -17,7 +17,6 @@ export default class MyDocument extends Document {
                         href="/static/font/BDO-Grotesk/BDOGrotesk-VF.woff2"
                         crossOrigin=""
                     />
-                    <link rel="stylesheet" type="text/css" href="/static/style/global.css" />
                 </Head>
                 <body>
                     <Main />
