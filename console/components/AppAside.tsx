@@ -14,7 +14,10 @@ export default function AppAside() {
                 width: "13em",
                 padding: "1em",
                 transform: "scale(var(--tree-scale))",
-                transformOrigin: "top left"
+                transformOrigin: "top left",
+                display: "flex",
+                flexDirection: "column",
+                gap: "calc(var(--grid-gap) / 2)"
             }}
         >
             <UCTree
