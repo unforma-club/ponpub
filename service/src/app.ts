@@ -14,7 +14,6 @@ import geoip from "geoip-lite";
 import errorHandler from "middlewares/mid.error";
 import MidSession from "middlewares/mid.session";
 import MidLimiter from "middlewares/mid.limiter";
-import MidUser from "middlewares/mid.user";
 import ErrorNotFound from "responses/res.error.not-found";
 import RouterV1 from "routes/route.v1";
 
@@ -72,7 +71,7 @@ app.use(MidLimiter.memory);
 app.use(MidSession.currentUser);
 app.use("/api/v1", RouterV1);
 
-app.route("/api/auth").get(MidUser.hasOwner, async (req, res) => {
+app.route("/api/auth").get(async (req, res) => {
     const currentUser = req.currentUser;
     if (currentUser) return res.redirect(307, `${req.query.callback_url}`);
 
