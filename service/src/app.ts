@@ -1,3 +1,4 @@
+import type { Request, Response, NextFunction } from "express";
 import express, { json, urlencoded } from "express";
 import "express-async-errors";
 import cookieSession from "cookie-session";
@@ -7,30 +8,45 @@ import compression from "compression";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
+import favicon from "serve-favicon";
+import geoip from "geoip-lite";
 
 import errorHandler from "middlewares/mid.error";
 import MidSession from "middlewares/mid.session";
+import MidLimiter from "middlewares/mid.limiter";
+import MidUser from "middlewares/mid.user";
+import ErrorNotFound from "responses/res.error.not-found";
 import RouterV1 from "routes/route.v1";
+
+function ipLookup(req: Request, res: Response, next: NextFunction) {
+    // const ip = "207.97.227.239";
+    const ip = req.headers["x-forwarded-for"] as string;
+    const geo = geoip.lookup(ip);
+
+    console.log(geo);
+    next();
+}
 
 const isProduction = process.env.NODE_ENV === "production";
 const app = express();
 
 app.set("name", "Ponpub Service");
-app.set("trust-proxy", true);
+app.set("trust proxy", true);
 app.set("x-powered-by", false);
 
 app.set("view engine", "ejs");
 app.set("views", process.cwd() + "/views");
 
+app.use(favicon(process.cwd() + "/public/images/icons/favicon.ico"));
 app.use("/static", express.static("public"));
 app.use(json({ limit: "100mb" }));
 app.use(urlencoded({ extended: false }));
 app.use(
     cookieSession({
-        name: "ponpub_session",
+        name: "pp_session",
         secret: process.env.JWT_KEY,
-        domain: isProduction ? "ponpub-test.unforma.club" : "localhost",
-        sameSite: "strict"
+        sameSite: true,
+        secure: true
     })
 );
 
@@ -39,7 +55,7 @@ app.use(mongoSanitize());
 app.use(compression());
 
 app.use(cors());
-app.use(helmet({ referrerPolicy: { policy: ["origin"] } }));
+app.use(helmet());
 app.use(
     morgan(
         isProduction
@@ -48,10 +64,15 @@ app.use(
     )
 );
 
+if (isProduction) {
+    app.use(ipLookup);
+}
+
+app.use(MidLimiter.memory);
 app.use(MidSession.currentUser);
 app.use("/api/v1", RouterV1);
 
-app.route("/api/auth").get(async (req, res) => {
+app.route("/api/auth").get(MidUser.hasOwner, async (req, res) => {
     const currentUser = req.currentUser;
     if (currentUser) return res.redirect(307, `${req.query.callback_url}`);
 
@@ -65,7 +86,9 @@ app.route("/api/auth").get(async (req, res) => {
     return res.render("login", { message: newMessage });
 });
 
-app.all("*", (_, res) => res.status(404).render("404"));
+app.all("*", () => {
+    throw new ErrorNotFound();
+});
 app.use(errorHandler);
 
 export default app;
