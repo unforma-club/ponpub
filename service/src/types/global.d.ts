@@ -4,6 +4,7 @@ declare global {
     namespace Express {
         interface Request {
             currentUser: BaseUser | null;
+            location: any | null;
         }
     }
 

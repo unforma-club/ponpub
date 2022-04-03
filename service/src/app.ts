@@ -17,16 +17,18 @@ import MidLimiter from "middlewares/mid.limiter";
 import ErrorNotFound from "responses/res.error.not-found";
 import RouterV1 from "routes/route.v1";
 
-function ipLookup(req: Request, res: Response, next: NextFunction) {
-    // const ip = "207.97.227.239";
-    const ip = req.headers["x-forwarded-for"] as string;
-    const geo = geoip.lookup(ip);
+const isProduction = process.env.NODE_ENV === "production";
+function ipLookup(req: Request, _res: Response, next: NextFunction) {
+    let ip: string = "207.97.227.239";
+    if (isProduction) {
+        ip = req.headers["x-forwarded-for"] as string;
+    }
 
-    console.log(geo);
+    const geo = geoip.lookup(ip);
+    req.location = geo;
     next();
 }
 
-const isProduction = process.env.NODE_ENV === "production";
 const app = express();
 
 app.set("name", "Ponpub Service");
@@ -63,10 +65,7 @@ app.use(
     )
 );
 
-if (isProduction) {
-    app.use(ipLookup);
-}
-
+app.use(ipLookup);
 app.use(MidLimiter.memory);
 app.use(MidSession.currentUser);
 app.use("/api/v1", RouterV1);
@@ -85,8 +84,8 @@ app.route("/api/auth").get(async (req, res) => {
     return res.render("login", { message: newMessage });
 });
 
-app.all("*", () => {
-    throw new ErrorNotFound();
+app.all("*", (req) => {
+    throw new ErrorNotFound(req.location);
 });
 app.use(errorHandler);
 

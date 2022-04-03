@@ -32,7 +32,8 @@ const ControlUser = {
             id: buildUser.id,
             email: buildUser.email,
             role: buildUser.role,
-            userName: buildUser.userName
+            userName: buildUser.userName,
+            location: req.location
         });
 
         return new SuccessJson(res, buildUser, 201);
@@ -49,7 +50,8 @@ const ControlUser = {
             id: user.id,
             email: user.email,
             role: user.role,
-            userName: user.userName
+            userName: user.userName,
+            location: req.location
         });
 
         return new SuccessJson(res, user, 202);

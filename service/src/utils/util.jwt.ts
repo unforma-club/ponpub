@@ -11,5 +11,5 @@ export function jwtSign(object: Object, options?: SignOptions) {
 }
 
 export function jwtVerify(token: string) {
-    return verify(token, privateKey) as BaseUser;
+    return verify(token, privateKey) as BaseUser & { location?: any };
 }
