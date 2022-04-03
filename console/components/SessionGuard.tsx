@@ -35,7 +35,11 @@ export default function SessionGuard(props: PropsWithChildren<{}>) {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        style={{ display: "grid", gridTemplateColumns: "max-content 1fr" }}
+                        style={{
+                            display: "grid",
+                            gridTemplateColumns: "max-content 1fr",
+                            minHeight: "100vh"
+                        }}
                     >
                         {children}
                     </motion.main>

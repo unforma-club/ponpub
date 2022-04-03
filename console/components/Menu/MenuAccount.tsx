@@ -1,3 +1,4 @@
+import NextLink from "next/link";
 import useBoolean from "hooks/use-boolean";
 import UCTree from "components/Utils/UCTree";
 import { useSession } from "components/Context/ContextSession";
@@ -6,8 +7,16 @@ export default function MenuAccount() {
     const { handleLogout } = useSession();
     const { value, toggle } = useBoolean(false, true);
     return (
-        <UCTree defaultOpen={value} parent={<button onClick={toggle}>Account</button>}>
-            <button onClick={handleLogout}>Logout</button>
+        <UCTree defaultOpen={value}>
+            <button onClick={toggle}>Account</button>
+            <NextLink href="/application">
+                <a data-ellipsis="Application">
+                    <span>Application</span>
+                </a>
+            </NextLink>
+            <button onClick={handleLogout}>
+                <span>Logout</span>
+            </button>
         </UCTree>
     );
 }

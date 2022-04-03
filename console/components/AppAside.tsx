@@ -9,29 +9,30 @@ import MenuTheme from "./Menu/MenuTheme";
 export default function AppAside() {
     const { pathname } = useRouter();
     return (
-        <aside
-            style={{
-                width: "13em",
-                padding: "1em",
-                transform: "scale(var(--tree-scale))",
-                transformOrigin: "top left",
-                display: "flex",
-                flexDirection: "column",
-                gap: "calc(var(--grid-gap) / 2)"
-            }}
-        >
-            <UCTree
-                defaultOpen={pathname === "/"}
-                parent={
+        <aside style={{ width: "14em" }}>
+            <div
+                style={{
+                    position: "sticky",
+                    top: 0,
+                    padding: "1em",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "calc(var(--grid-gap) / 2)"
+                }}
+            >
+                <UCTree defaultOpen={pathname === "/"}>
                     <NextLink href="/">
-                        <a data-active={pathname === "/"}>Ponpub</a>
+                        <a data-active={pathname === "/"}>
+                            <span>Ponpub</span>
+                        </a>
                     </NextLink>
-                }
-            />
-            <MenuFont />
-            <MenuBlog />
-            <MenuAccount />
-            <MenuTheme />
+                </UCTree>
+
+                <MenuFont />
+                <MenuBlog />
+                <MenuAccount />
+                <MenuTheme />
+            </div>
         </aside>
     );
 }

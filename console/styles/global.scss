@@ -1,6 +1,75 @@
+// From service application
 @import url("/static/style/global.css");
 
 * {
     outline-width: 2px;
     outline-color: magenta;
+}
+
+#nprogress {
+    pointer-events: none;
+
+    .bar {
+        background: #fff;
+        mix-blend-mode: difference;
+
+        position: fixed;
+        z-index: 2002;
+        top: 0;
+        left: 0;
+
+        width: 100%;
+        height: calc(var(--grid-gap) / 4);
+    }
+
+    .spinner {
+        display: block;
+        position: fixed;
+        z-index: 2002;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: calc(var(--header-height) * 1.25);
+
+        mix-blend-mode: difference;
+
+        .spinner-icon {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transform-origin: center bottom;
+
+            width: calc(var(--grid-gap) * 4);
+            height: calc(var(--grid-gap) * 2);
+
+            border-top-right-radius: calc(var(--grid-gap) * 2);
+            border-top-left-radius: calc(var(--grid-gap) * 2);
+            border: calc(var(--grid-gap) / 4) solid;
+            border-bottom: none;
+            border-color: #fff;
+
+            animation: nprogress-spinner 350ms linear infinite;
+        }
+    }
+
+    @-webkit-keyframes nprogress-spinner {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+    @keyframes nprogress-spinner {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 }
