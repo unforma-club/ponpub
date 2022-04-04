@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import { RateLimiterMemory } from "rate-limiter-flexible";
 
-const limiter = new RateLimiterMemory({ points: 10, duration: 1, keyPrefix: "middleware" });
+const limiter = new RateLimiterMemory({ points: 100, duration: 1, keyPrefix: "middleware" });
 
 const MidLimiter = {
     memory: (req: Request, res: Response, next: NextFunction) => {
