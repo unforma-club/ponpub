@@ -23,11 +23,11 @@ export default function Page(props: PageProps) {
 export const getStaticPaths: GetStaticPaths = async () => {
     const posts = await getPosts("blog");
     const paths = posts.data.map((item) => ({ params: { slug: item.slug } }));
-    return { paths, fallback: false };
+    return { paths, fallback: "blocking" };
 };
 
 export const getStaticProps: GetStaticProps<ServerProps> = async ({ params }) => {
     const post = await getPost(params.slug as string);
-    if (!post || !post.success || !post.data) return { notFound: true, props: { blog: null } };
-    return { props: { blog: post.data }, revalidate: 100 };
+    if (!post || !post.success || !post.data) return { notFound: true };
+    return { props: { blog: post.data }, revalidate: 10 };
 };
