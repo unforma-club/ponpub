@@ -7,7 +7,7 @@
     color: inherit;
     background-color: inherit;
 
-    border-radius: 2em;
+    border: 1px solid;
 }
 
 .select {
@@ -20,7 +20,7 @@
     text-rendering: auto;
 
     border: none;
-    border-radius: inherit;
+    border-radius: 0;
     padding-left: 0.5em;
     padding-right: 2em;
 

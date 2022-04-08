@@ -1,9 +1,43 @@
 // From service application
 @import url("/static/style/global.css");
 
+:root {
+    --google-background: #ffffff;
+    --google-foreground: #202124;
+    --google-foreground-link: #1a0dab;
+    --google-background-search-bar: var(--google-background);
+
+    --twitter-background: #ffffff;
+    --twitter-foreground: #0f1419;
+}
+
+[data-theme="light"] {
+    --google-background: #ffffff;
+    --google-foreground: #202124;
+    --google-foreground-link: #1a0dab;
+    --google-background-search-bar: var(--google-background);
+
+    --twitter-background: #ffffff;
+    --twitter-foreground: #0f1419;
+}
+[data-theme="dark"] {
+    --google-background: #202124;
+    --google-foreground: #bdc1c6;
+    --google-foreground-link: #8ab4f8;
+    --google-background-search-bar: #303134;
+
+    --twitter-background: #15202b;
+    --twitter-foreground: #f7f9f9;
+}
+
 * {
     outline-width: 2px;
     outline-color: magenta;
+}
+
+a {
+    color: currentColor;
+    text-decoration: none;
 }
 
 #nprogress {

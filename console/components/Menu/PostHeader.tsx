@@ -8,8 +8,13 @@ type PostHeaderProps = {
 export default function PostHeader(props: PostHeaderProps) {
     const { type, slug } = props;
     return (
-        <div style={{ display: "flex", alignItems: "center" }}>
-            <NextLink href={`/post/${type}/[slug]`} as={`/post/${type}/${slug}`}>
+        <>
+            <NextLink
+                href={{
+                    pathname: slug ? `/post/${type}/[slug]` : `/post/new`,
+                    query: slug ? { slug } : { type }
+                }}
+            >
                 <a>
                     <span>{type}</span>
                 </a>
@@ -17,12 +22,13 @@ export default function PostHeader(props: PostHeaderProps) {
 
             <NextLink href={`/post/new?type=${type}`}>
                 <a
+                    data-square="true"
                     style={{
-                        borderRadius: "100%",
+                        marginLeft: 0,
                         aspectRatio: "1/1",
-                        marginLeft: "0.1em",
                         padding: 0,
-                        borderColor: "transparent"
+                        minWidth: 0,
+                        borderRadius: "100%"
                     }}
                 >
                     <span
@@ -31,7 +37,8 @@ export default function PostHeader(props: PostHeaderProps) {
                             alignItems: "center",
                             justifyContent: "center",
                             width: "100%",
-                            height: "100%"
+                            height: "100%",
+                            aspectRatio: "1/1"
                         }}
                     >
                         <svg
@@ -48,6 +55,6 @@ export default function PostHeader(props: PostHeaderProps) {
                     </span>
                 </a>
             </NextLink>
-        </div>
+        </>
     );
 }
