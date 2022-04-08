@@ -11,6 +11,8 @@ export default function MenuFont() {
     const queryFont = query.type === "font";
     const { data } = useSWR<GetPosts>("/api/v1/post?type=font");
 
+    const queries = ["general", "typeface"];
+
     return (
         <UCTree defaultOpen={parentActive || queryFont}>
             <PostHeader
@@ -21,14 +23,30 @@ export default function MenuFont() {
             {data &&
                 data.success &&
                 data.data.map((item, i) => (
-                    <NextLink key={i} href="/post/font/[slug]" as={`/post/font/${item.slug}`}>
-                        <a
-                            data-active={query?.slug?.includes(item.slug)}
-                            data-ellipsis={item.title}
-                        >
-                            <span>{item.title}</span>
-                        </a>
-                    </NextLink>
+                    <UCTree key={i} role="child" defaultOpen={query.slug === item.slug}>
+                        <NextLink key={i} href="/post/font/[slug]" as={`/post/font/${item.slug}`}>
+                            <a data-active={query.slug === item.slug} data-ellipsis={item.title}>
+                                <span>{item.title}</span>
+                            </a>
+                        </NextLink>
+
+                        {queries.map((q, qi) => (
+                            <NextLink
+                                key={qi}
+                                href={{
+                                    pathname: "/post/font/[slug]",
+                                    query: { slug: item.slug, tab: q }
+                                }}
+                            >
+                                <a
+                                    data-ellipsis={q}
+                                    data-active={(q === "general" && !query.tab) || query.tab === q}
+                                >
+                                    <span>{q}</span>
+                                </a>
+                            </NextLink>
+                        ))}
+                    </UCTree>
                 ))}
         </UCTree>
     );
