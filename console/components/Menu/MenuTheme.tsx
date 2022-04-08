@@ -4,11 +4,11 @@ import UCTree from "components/Utils/UCTree";
 
 export default function MenuTheme() {
     const { theme, themes, setTheme } = useTheme();
-    const { value, toggle } = useBoolean(false, true);
+    const { value: boolTheme, toggle: toggleBoolTheme } = useBoolean(false, true);
 
     return (
-        <UCTree defaultOpen={value}>
-            <button onClick={toggle}>
+        <UCTree defaultOpen={boolTheme}>
+            <button onClick={toggleBoolTheme}>
                 <span>Theme</span>
             </button>
             {themes.map((item: string, i: number) => (
