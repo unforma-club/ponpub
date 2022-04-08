@@ -1,14 +1,9 @@
-import type { GetStaticProps, InferGetStaticPropsType } from "next";
 import type { BasePost } from "types/post";
+import type { GetPosts } from "api/getPosts";
 import NextLink from "next/link";
-import NextHead from "next/head";
-import getPosts, { GetPosts } from "api/getPosts";
+import useSWR from "swr";
 import { useSession } from "components/Context/ContextSession";
-
-type ServerProps = {
-    posts: GetPosts;
-};
-type PageProps = InferGetStaticPropsType<typeof getStaticProps>;
+import LayoutMain from "components/Layout/LayoutMain";
 
 type ListProps = {
     data: BasePost;
@@ -48,32 +43,23 @@ function PostList(props: PostListProps) {
     );
 }
 
-export const getStaticProps: GetStaticProps<ServerProps> = async () => {
-    const posts = await getPosts();
-    return { props: { posts } };
-};
-
-export default function Page(props: PageProps) {
-    const { posts } = props;
+export default function Page() {
     const { session } = useSession();
+    const { data } = useSWR<GetPosts>("/api/v1/post");
     return (
         <>
-            <NextHead>
-                <title>Ponpub</title>
-            </NextHead>
-
-            <div style={{ padding: "1em" }}>
-                {posts && posts.success && posts.data && posts.data.length > 1 ? (
+            <LayoutMain style={{ paddingTop: "6em" }}>
+                {data && data.success && data.data && data.data.length !== 0 ? (
                     <>
-                        <PostList category="font" data={posts.data} />
-                        <PostList category="blog" data={posts.data} />
+                        <PostList category="font" data={data.data} />
+                        <PostList category="blog" data={data.data} />
                     </>
                 ) : (
                     "There's no post yet"
                 )}
 
                 <pre>{JSON.stringify(session, null, 2)}</pre>
-            </div>
+            </LayoutMain>
         </>
     );
 }
