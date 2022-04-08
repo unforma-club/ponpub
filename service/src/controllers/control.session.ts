@@ -11,7 +11,7 @@ const ControlSession = {
         // const apiKey = q.apiKey as string;
         // const token = verify(apiKey, process.env.JWT_KEY);
 
-        return new SuccessJson(res, { user: req.currentUser });
+        return new SuccessJson(res, req.currentUser);
     }
 };
 
