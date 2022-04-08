@@ -4,9 +4,10 @@ import { memo, Children, useState, useRef, useEffect, useCallback } from "react"
 import { motion, Variants } from "framer-motion";
 import useIsomorphicLayout from "hooks/use-isomorphic-layout";
 
-type UCTreeProps = HTMLAttributes<HTMLDivElement> & {
+type UCTreeProps = HTMLAttributes<HTMLUListElement> & {
     defaultOpen?: boolean;
     grid?: boolean;
+    role?: "parent" | "child";
 };
 
 function buildVariants(state: boolean): Variants {
@@ -29,13 +30,14 @@ function buildVariants(state: boolean): Variants {
 }
 
 const UCTree = memo<UCTreeProps>((props) => {
-    const { children, defaultOpen } = props;
+    const { children, defaultOpen, role = "parent" } = props;
     const refUl = useRef<HTMLUListElement>(null);
     const childLength = Children.count(children);
     const [mounted, setMounted] = useState(false);
     const [expand, setExpand] = useState(false);
     const maxChild = 10;
-    const heightIfMoreThanMaxChild = `calc(2em * ${maxChild} + 4.5em)`;
+    // const heightIfMoreThanMaxChild = `calc(2em * ${maxChild} + 4.5em)`;
+    const heightIfMoreThanMaxChild = `calc(2em * ${maxChild + 1} - ${maxChild + 1}px)`;
 
     const cbAnimation = useCallback(() => {
         if (defaultOpen) {
@@ -69,6 +71,7 @@ const UCTree = memo<UCTreeProps>((props) => {
             initial={defaultOpen}
             animate={defaultOpen ? "show" : "hide"}
             variants={buildVariants(childLength >= maxChild)}
+            data-role={role}
             data-expand={defaultOpen}
             className={styles.container}
             style={{
@@ -98,6 +101,7 @@ const UCTree = memo<UCTreeProps>((props) => {
                         <motion.li
                             key={i}
                             className={styles.list}
+                            data-expand={defaultOpen}
                             data-role="child"
                             variants={{
                                 hide: { display: "none" },
