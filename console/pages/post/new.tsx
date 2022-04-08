@@ -1,10 +1,14 @@
 import type { BaseResponse } from "types/response";
+import type { BasePost } from "types/post";
 import { useCallback } from "react";
 import { mutate } from "swr";
 import { useRouter } from "next/router";
+import { Formik } from "formik";
 import fetchJson from "libs/fetchJson";
 import useIsomorphicLayout from "hooks/use-isomorphic-layout";
 import UCSelect from "components/Utils/UCSelect";
+import UCInput from "components/Utils/UCInput";
+import UCButton from "components/Utils/UCButton";
 
 type Step = {
     name: string;
@@ -24,6 +28,27 @@ export default function Page() {
     const selectHandler = useCallback(
         (v: string) => replace(`${pathname}?type=${v}`, `${pathname}?type=${v}`, { shallow: true }),
         [pathname, replace]
+    );
+
+    const postHandler = useCallback(
+        (title: string) => {
+            const slug = title.trim().replace(/\s/g, "-").toLowerCase();
+            fetchJson<BaseResponse & { data: BasePost }>("/api/v1/post", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, slug, type: query.type })
+            })
+                .then((res) => {
+                    mutate(`/api/v1/post?type=${query.type}`).then(() =>
+                        replace(
+                            `/post/${query.type}/[slug]`,
+                            `/post/${query.type}/${res.data.slug}`
+                        )
+                    );
+                })
+                .catch((err) => console.log(err));
+        },
+        [query, replace]
     );
 
     return (
@@ -46,32 +71,24 @@ export default function Page() {
                 }}
             />
 
-            <div>
-                <button
-                    onClick={() => {
-                        fetchJson<BaseResponse & { data: { slug: string } }>("/api/v1/post", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                title: "Glyphs To UFO",
-                                slug: "glyphs-to-ufo",
-                                type: query.type
-                            })
-                        })
-                            .then((res) => {
-                                mutate(`/api/v1/post?type=${query.type}`).then(() =>
-                                    push(
-                                        `/post/${query.type}/[slug]`,
-                                        `/post/${query.type}/${res.data.slug}`
-                                    )
-                                );
-                            })
-                            .catch((err) => console.log(err));
-                    }}
-                >
-                    Create
-                </button>
-            </div>
+            <Formik initialValues={{ title: "" }} onSubmit={(v, a) => postHandler(v.title)}>
+                {({ values, handleSubmit, handleChange, handleBlur }) => (
+                    <form onSubmit={handleSubmit}>
+                        <UCInput
+                            name="title"
+                            type="text"
+                            placeholder="Post Title"
+                            value={values.title}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                        />
+
+                        <div>
+                            <UCButton type="submit">Create</UCButton>
+                        </div>
+                    </form>
+                )}
+            </Formik>
         </div>
     );
 }
