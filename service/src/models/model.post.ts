@@ -21,7 +21,9 @@ const postSchema = new Schema(
         title: { type: String, required: true, indexes: true },
         slug: { type: String, required: true, indexes: true },
         type: { type: String, required: true, default: "blog" },
-        author: { type: Schema.Types.ObjectId, ref: "user" }
+        author: { type: Schema.Types.ObjectId, ref: "User" },
+        publish: { type: Boolean, default: false },
+        visibility: { type: Number, default: 2 }
     },
     {
         toJSON: {
