@@ -39,7 +39,34 @@ const ControlPost = {
         const slug = req.params.slug;
         try {
             const post = await PostModel.findOne({ slug });
+            await post.populate("author");
             return new SuccessJson(res, post);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    patchPostBySlug: async function (req: Request, res: Response) {
+        const slug = req.params.slug;
+        const body = req.body;
+        try {
+            const updated = await PostModel.findOneAndUpdate(
+                { slug },
+                { ...body },
+                { returnOriginal: false }
+            ).exec();
+            return new SuccessJson(res, updated);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    },
+    deletePostBySlug: async function (req: Request, res: Response) {
+        const slug = req.params.slug;
+        const postType = req.query.type;
+
+        try {
+            await PostModel.deleteOne({ slug });
+            const nextPost = await PostModel.findOne({ type: postType });
+            return new SuccessJson(res, nextPost);
         } catch (error) {
             throw new Error(error.message);
         }
