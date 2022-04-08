@@ -59,6 +59,14 @@ const ControlUser = {
     logout: function (req: Request, res: Response) {
         req.session = null;
         return new SuccessJson(res, null);
+    },
+    getUser: async function (req: Request, res: Response) {
+        try {
+            const users = await UserModel.find();
+            return new SuccessJson(res, users);
+        } catch (error) {
+            throw new ErrorNotFound(error.message);
+        }
     }
 };
 
