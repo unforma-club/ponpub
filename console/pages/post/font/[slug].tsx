@@ -1,33 +1,38 @@
-import type { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
-import type { BasePost } from "types/post";
-import getPost from "api/getPost";
-import getPosts from "api/getPosts";
+import { useRouter } from "next/router";
+import ProviderPost, { ConsumerPost } from "components/Context/ContextPost";
+import LayoutPost from "components/Layout/LayoutPost";
+import TabGeneral from "components/Post/TabGeneral";
 
-type ServerProps = {
-    font: BasePost;
-};
+const dummyDescription = `It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).`;
 
-type PageProps = InferGetStaticPropsType<typeof getStaticProps>;
-
-export default function Page(props: PageProps) {
-    const { font } = props;
-    const { title } = font;
+export default function Page() {
+    const { query } = useRouter();
     return (
-        <div>
-            <h1>{title}</h1>
-            <pre>{JSON.stringify(props, null, 2)}</pre>
-        </div>
+        <ProviderPost>
+            <ConsumerPost>
+                {({ post: { title, publish, description } }) => (
+                    <LayoutPost>
+                        {!query.tab || query.tab === "general" ? (
+                            <>
+                                <TabGeneral />
+
+                                <div style={{ paddingBlock: "1em", paddingRight: "1em" }}>
+                                    <h1
+                                        style={{
+                                            color: publish ? "currentcolor" : "var(--accents-4)"
+                                        }}
+                                    >
+                                        {title}
+                                    </h1>
+                                    <p>{description ?? dummyDescription}</p>
+                                </div>
+                            </>
+                        ) : (
+                            "Not Found"
+                        )}
+                    </LayoutPost>
+                )}
+            </ConsumerPost>
+        </ProviderPost>
     );
 }
-
-export const getStaticPaths: GetStaticPaths = async () => {
-    const posts = await getPosts("font");
-    const paths = posts.data.map((item) => ({ params: { slug: item.slug } }));
-    return { paths, fallback: "blocking" };
-};
-
-export const getStaticProps: GetStaticProps<ServerProps> = async ({ params }) => {
-    const post = await getPost(params.slug as string);
-    if (!post || !post.success || !post.data) return { notFound: true };
-    return { props: { font: post.data }, revalidate: 10 };
-};
